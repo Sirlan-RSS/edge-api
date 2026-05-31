@@ -2,7 +2,7 @@ export const config = {
   runtime: 'edge',
 };
 
-const VPS_HOST = 'vercel.1site.pp.ua';
+const VPS_HOST = '164.152.43.13';
 const VPS_PORT = 8383;
 const TOKEN_TTL = 300000;
 
