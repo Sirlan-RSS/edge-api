@@ -1,4 +1,3 @@
-// api/index.js
 export const config = {
   runtime: 'edge', 
 };
@@ -12,8 +11,8 @@ const BLOCKED_HEADERS = new Set([
 
 export default async function handler(req) {
   const url = new URL(req.url);
-  // DOMÍNIO DO VPS (aponta para 164.152.43.13)
-  const target = `http://vps.1site.pp.ua:8383${url.pathname}${url.search}`;
+  // O alvo agora utiliza o domínio verceledge.erosrss.pp.ua em vez do IP direto
+  const target = `http://vercel.1site.pp.ua:8383${url.pathname}${url.search}`;
 
   const newHeaders = new Headers();
   for (const [key, value] of req.headers.entries()) {
@@ -22,7 +21,7 @@ export default async function handler(req) {
     }
   }
   
-  // Host que o Xray espera
+  // Atualização do cabeçalho Host para coincidir com o novo domínio
   newHeaders.set('host', 'vercel.1site.pp.ua');
   newHeaders.set('connection', 'keep-alive');
 
