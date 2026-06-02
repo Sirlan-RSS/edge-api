@@ -10,7 +10,7 @@ const BLOCKED_HEADERS = new Set([
 export default async function handler(req) {
 const url = new URL(req.url);
 // Defina aqui o subdomínio que aponta para a sua VPS e a porta do Xray
-const target = `http:/verceledge.erosrss.pp.ua:8383${url.pathname}${url.search}`;
+const target = `http:/vps.1site.pp.ua:8383${url.pathname}${url.search}`;
 const newHeaders = new Headers();
 for (const [key, value] of req.headers.entries()) {
 if (!BLOCKED_HEADERS.has(key.toLowerCase())) {
@@ -18,7 +18,7 @@ newHeaders.set(key, value);
 }
 }
 // O Host deve ser idêntico ao subdomínio definido acima
-newHeaders.set('host', 'verceledge.erosrss.pp.ua');
+newHeaders.set('host', 'vps.1site.pp.ua');
 newHeaders.set('connection', 'keep-alive');
 const init = {
 method: req.method,
