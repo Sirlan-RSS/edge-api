@@ -1,11 +1,13 @@
 // api/proxy.js - Vercel Edge Runtime
+// Proxy para Xray xhttp via hostname (evita bloqueio de IP direto no Edge)
 
 export const config = {
   runtime: 'edge',
 };
 
-const VPS_IP = '164.152.43.13';
+const VPS_HOST = 'vps.1site.pp.ua';
 const VPS_PORT = 8383;
+
 const BLOCKED_HEADERS = [
   'host', 'connection', 'x-forwarded-for',
   'x-forwarded-host', 'x-forwarded-proto',
@@ -15,16 +17,15 @@ const BLOCKED_HEADERS = [
 
 export default async function handler(request) {
   const url = new URL(request.url);
-  const target = `http://${VPS_IP}:${VPS_PORT}${url.pathname}${url.search}`;
+  const target = `http://${VPS_HOST}:${VPS_PORT}${url.pathname}${url.search}`;
 
-  // Copia headers limpos
   const headers = new Headers();
   for (const [key, value] of request.headers) {
     if (!BLOCKED_HEADERS.includes(key.toLowerCase())) {
       headers.set(key, value);
     }
   }
-  headers.set('host', VPS_IP);
+  headers.set('host', VPS_HOST);
   headers.set('connection', 'keep-alive');
 
   try {
@@ -35,7 +36,6 @@ export default async function handler(request) {
       duplex: 'half',
     });
 
-    // Copia headers da resposta
     const responseHeaders = new Headers(response.headers);
     responseHeaders.set('X-Accel-Buffering', 'no');
     responseHeaders.set('Cache-Control', 'no-store');
@@ -48,6 +48,6 @@ export default async function handler(request) {
 
   } catch (error) {
     console.error('Proxy error:', error.message);
-    return new Response('Bad Gateway', { status: 502 });
+    return new Response('Bad Gateway: ' + error.message, { status: 502 });
   }
 }
