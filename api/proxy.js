@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     method: req.method,
     headers: {
       ...cleanHeaders,
-      host: '164.152.43.13',
+      host: 'vercel.1site.pp.ua',
       connection: 'keep-alive',
     },
     agent,
